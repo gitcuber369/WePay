@@ -1,6 +1,5 @@
 import React from 'react'
 import {Vortex} from '../components/ui/Vortex';
-import { TypewriterEffectDemo } from '../ExternalComponents/TypeWriterEffect';
 import {Link} from 'react-router-dom'
 
 function HeroPage() {
@@ -21,10 +20,10 @@ function HeroPage() {
             </p>
             </p>
             <div className='flex justify-center gap-4'>
-          <Link to={"/signup"} className="w-40 h-10 flex text-center justify-center rounded-xl items-center font-bold hover:bg-gradient-to-r from-purple-700 to-blue-900 hover:text-white hover:transition-delay hover:duration-300  bg-gray-100 text-purple-700 border border-black  text-sm">
+          <Link to={"/signup"} className="w-40 h-10 flex text-center justify-center rounded-xl items-center font-bold hover:bg-gradient-to-r from-purple-700 to-blue-900 hover:text-white hover:transition-delay hover:duration-200  bg-gray-100 text-purple-700 border border-none  text-sm">
           Get Started!
         </Link>
-        <Link to={"/login"} className="w-40 h-10 flex text-center justify-center rounded-xl items-center font-bold hover:bg-gradient-to-r from-purple-700 to-blue-900 hover:text-white hover:transition-delay hover:duration-300  bg-white text-purple-700 border border-black  text-sm">
+        <Link to={"/signin"} className="w-40 h-10 flex text-center justify-center rounded-xl items-center font-bold hover:bg-gradient-to-r from-purple-700 to-blue-900 hover:text-white hover:transition-delay hover:duration-200  bg-white text-purple-700 border border-none  text-sm">
           Login
         </Link>
             </div>
