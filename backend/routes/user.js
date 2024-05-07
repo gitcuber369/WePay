@@ -96,13 +96,27 @@ router.post("/signin", async (req, res) => {
     })
 })
 
+router.get("/auth", authMiddleware, async (req,res) => {
+        const userId = req.body.userId;
+        const findUser = await User.findById(userId);
+        if (!findUser) {
+            return res.status(411).json({
+                message : "No such user found"
+            });
+        }
+        return res 
+        .status(200)
+        .json({ firstName: findUser.firstName , lastName: findUser.lastName});
+});
+
+
 const updateBody = zod.object({
 	password: zod.string().optional(),
     firstName: zod.string().optional(),
     lastName: zod.string().optional(),
 })
 
-router.put("/", authMiddleware, async (req, res) => {
+router.put("/update", authMiddleware, async (req, res) => {
     const { success } = updateBody.safeParse(req.body)
 
     console.log(req.body);
@@ -117,7 +131,7 @@ router.put("/", authMiddleware, async (req, res) => {
     })
 
     res.json({
-        message: "Updated successfully"
+        message: "Updated successfully" 
     })
 })
 

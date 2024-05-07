@@ -6,6 +6,28 @@ import InputBox from '../components/InputBox';
 import Button from '../components/Button';
 import BottomWarning from '../components/BottomWarning';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+
+
+const errorNotify = () => {
+  toast.error("Error!", {
+    style: {
+      background: "#000000",
+      color: '#fff'
+    }
+  });
+}
+
+const successNotify = () => {
+  toast.success("Success!", {
+    style: {
+      background: "#000000",
+      color: '#fff'
+    }
+  })
+}
+
 
 
 function Signup() {
@@ -13,7 +35,29 @@ function Signup() {
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const handleSignup = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post('http://localhost:3000/api/v1/user/signup', {
+        firstName,
+        lastName, 
+        username,
+        password,
+      });
+      sessionStorage.setItem("token", response.data.token);
+      successNotify();
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    } catch (error) {
+      setLoading(false);
+      errorNotify();
+      console.error("Signup error:", error);
+  }
+};
   return (
     <div className='h-screen w-screen'>
       <Vortex
@@ -58,16 +102,8 @@ function Signup() {
             />
             <div className='pt-4'>
               <Button
-                onClick={ async () => {
-                 const response =  await axios.post('http://localhost:3000/api/v1/user/signup', {
-                    username,
-                    password,
-                    firstName,
-                    lastName,
-                  });
-                 localStorage.setItem("token", response.data.token);
-                }}
-                label={"Sign Up"}
+                onClick={handleSignup}
+                label={loading ? "Loading..." : "Sign up"}
               />
             </div>
             <BottomWarning
@@ -78,8 +114,8 @@ function Signup() {
           </div>
         </div>
       </Vortex>
+      <Toaster />
     </div>
   );
 }
-
 export default Signup;

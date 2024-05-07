@@ -7,14 +7,46 @@ import Button from '../components/Button';
 import BottomWarning from '../components/BottomWarning';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
-
+const errorNotify = () => toast.error("Error!", {
+  style: {
+    background: "#000000",
+    color: '#fff'
+  }
+});
+const successNotify = () =>  toast.success("Success!", {
+    style: {
+      background: "#000000",
+      color: '#fff'
+    }
+  });
 
 function Signin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post('http://localhost:3000/api/v1/user/signin', {
+        username,
+        password,
+      });
+      sessionStorage.setItem("token", response.data.token);
+      successNotify();
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000); // Navigate after 2 seconds
+    } catch (error) {
+      setLoading(false);
+      errorNotify();
+      console.error("Login error:", error);
+    }
+  };
+
   return (
     <div className='h-screen w-screen'>
       <Vortex
@@ -50,14 +82,9 @@ function Signin() {
             />
             <div className='pt-4'>
               <Button
-                onClick={() => {
-                  axios.post('http://localhost:3000/api/v1/user/signin', {
-                    username,
-                    password,
-                  });
-                navigate('/dashboard')
-                }}
-                label={"Login"}
+                onClick={handleLogin}
+                label={loading ? "Signing in..." : "Login"}
+                disabled={loading}
               />
             </div>
             <BottomWarning
@@ -67,6 +94,7 @@ function Signin() {
             />
           </div>
         </div>
+        <Toaster />
       </Vortex>
     </div>
   );
