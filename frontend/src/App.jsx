@@ -5,6 +5,7 @@ import Dashboard from './Pages/Dashboard';
 import Signin from './Pages/Signin';
 import Signup from './Pages/Signup';
 import HeroPage from './Pages/HeroPage';
+import Profile from './Pages/Profile';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/send" element={<SendMoney />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </>

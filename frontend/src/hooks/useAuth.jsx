@@ -21,9 +21,7 @@ export const useAuth = () => {
         }
     };
 
-    useEffect(() => {
-        getUser();
-    }, []);
+    getUser();
 
     return {loggedIn , setLoggedIn , loading}
 };

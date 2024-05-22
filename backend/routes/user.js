@@ -106,7 +106,10 @@ router.get("/auth", authMiddleware, async (req,res) => {
         }
         return res 
         .status(200)
-        .json({ firstName: findUser.firstName , lastName: findUser.lastName});
+        .json({ 
+            firstName: findUser.firstName , 
+            lastName: findUser.lastName
+        });
 });
 
 
@@ -126,16 +129,44 @@ router.put("/update", authMiddleware, async (req, res) => {
         })
     }
 
-    await User.updateOne(req.body, {
-        id: req.userId
-    })
-
-    res.json({
-        message: "Updated successfully" 
-    })
+    const updatedUser = await User.findOneAndUpdate(req.body, {
+        id: req.userId,
+    }, {
+        firstName : req.body.firstName, 
+        lastName : req.body.lastName,
+    }, {
+        new : true,
+    }
+);
+    if(!updatedUser) {
+        return res.status(411).json({
+            message: "User not Found"     
+        });
+    } else {
+        console.log("Upodated user");
+        res.status(200).json({
+            message: "User updated successfully"
+        })
+    }
 })
 
-router.get("/bulk", async (req, res) => {
+router.get("/info", authMiddleware, async (req, res) => {
+    try{
+        const findUser = await User.findOne({ _id : req.userId});
+        if(!findUser) {
+            return res.status(404).json({
+                message : "user not fond"
+            })
+        } res.json({
+            firstName: findUser.firstName,
+            lastName: findUser.lastName
+        });
+    } catch(error) {
+        console.log("Error while finding user" ,error);
+    }
+})
+
+router.get("/bulk", authMiddleware ,async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await User.find({

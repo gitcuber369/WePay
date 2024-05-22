@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 
 mongoose.connect("mongodb+srv://arpitchaudhary2003:NyPM6ivUHQIf3Wv7@cluster0.byoohl5.mongodb.net/wepay")
 
-const db = mongoose.connection;
-
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
